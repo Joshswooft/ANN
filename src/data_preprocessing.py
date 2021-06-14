@@ -5,6 +5,10 @@ from scipy import stats
 from scipy.stats import zscore
 from sklearn.preprocessing import MinMaxScaler
 
+def get_scaler():
+    scaler = MinMaxScaler(feature_range=(0.1,0.9))
+    return scaler
+
 
 def import_data(path = "../data", fileName = "data.xlsx"):
     raw_data = pd.read_excel(os.path.join(os.path.dirname(__file__), path + "/" + fileName), usecols = ['Date', 'T', 'W', 'SR', 'DSP', 'DRH', 'PanE'])
@@ -18,9 +22,10 @@ def remove_outliers(df):
     return df
 
 def normalize_df(df):
-    scaler = MinMaxScaler(feature_range=(0.1,0.9))
+    scaler = get_scaler()
     scaled_df = scaler.fit_transform(df)
-    scaled_df = pd.DataFrame(scaled_df, columns=df.columns[1:])
+    scaled_df = pd.DataFrame(scaled_df, columns=df.columns)
+    print('normalized dataframe')
     return scaled_df
 
 # Some of the columns contain the wrong data type so this cleans the data by dropping the cell
@@ -33,7 +38,7 @@ def clean_errorenous_data(df):
 
 
 def denormalize_df(df):
-    scaler = MinMaxScaler(feature_range=(0.1,0.9))
+    scaler = get_scaler()
     inverse = scaler.inverse_transform(df)
     inverse = pd.DataFrame(inverse, columns=df.columns)
     return inverse
