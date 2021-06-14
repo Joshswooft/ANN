@@ -5,6 +5,7 @@ from scipy import stats
 from scipy.stats import zscore
 from sklearn.preprocessing import MinMaxScaler
 
+
 def import_data(path = "../data", fileName = "data.xlsx"):
     raw_data = pd.read_excel(os.path.join(os.path.dirname(__file__), path + "/" + fileName), usecols = ['Date', 'T', 'W', 'SR', 'DSP', 'DRH', 'PanE'])
     df = pd.DataFrame(raw_data)
@@ -29,3 +30,10 @@ def clean_errorenous_data(df):
     print (df.dtypes)
     df = df.dropna()
     return df
+
+
+def denormalize_df(df):
+    scaler = MinMaxScaler(feature_range=(0.1,0.9))
+    inverse = scaler.inverse_transform(df)
+    inverse = pd.DataFrame(inverse, columns=df.columns)
+    return inverse

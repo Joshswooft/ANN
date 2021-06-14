@@ -11,3 +11,7 @@ if __name__ == "__main__":
     df = data_preprocessing.remove_outliers(df)
 
     analysis.plot_every_col(df)
+
+    df = data_preprocessing.normalize_df(df)
+
+    
